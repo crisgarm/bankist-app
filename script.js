@@ -180,7 +180,23 @@ function transferMoney(e) {
     updateUI(currentAccount);
   }
 }
+//Request loan function
+function requestLoan(e) {
+  e.preventDefault();
 
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add movement
+    currentAccount.movements.push(amount);
+
+    //Update UI
+    updateUI(currentAccount);
+  }
+  //Clean input fields
+  inputLoanAmount.value = '';
+}
+
+//Close account function
 function closeAccount(e) {
   e.preventDefault();
 
@@ -207,6 +223,7 @@ function closeAccount(e) {
 
 btnLogin.addEventListener('click', login);
 btnTransfer.addEventListener('click', transferMoney);
+btnLoan.addEventListener('click', requestLoan);
 btnClose.addEventListener('click', closeAccount);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
