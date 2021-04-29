@@ -174,13 +174,41 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
-//EVENTS
-let currentAccount;
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    //In each call, print the remaining time to UI
+    labelTimer.textContent = `${min}:${sec}`;
 
-//FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+    //When 0 seconds, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+
+    //Decrese 1s
+    time--;
+  };
+
+  //Set time to 3 minutes
+  let time = 180;
+
+  //Call the timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+
+  return timer;
+};
+
+//EVENTS
+let currentAccount, timer;
+
+// //FAKE ALWAYS LOGGED IN
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 //Login function
 function login(e) {
@@ -215,6 +243,12 @@ function login(e) {
     //Clear input fields
     inputLoginUsername.value = inputLoginPin.value = ''; //Podemos hacerlo así porque el operador de asignación trabaja de derecha a izquierda
 
+    //Timer
+    if (timer) {
+      clearInterval(timer);
+    }
+    timer = startLogOutTimer();
+
     //Update UI
     updateUI(currentAccount);
   }
@@ -247,6 +281,10 @@ function transferMoney(e) {
 
     //Update UI
     updateUI(currentAccount);
+
+    //Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 }
 //Request loan function
@@ -268,6 +306,10 @@ function requestLoan(e) {
   }
   //Clean input fields
   inputLoanAmount.value = '';
+
+  //Reset timer
+  clearInterval(timer);
+  timer = startLogOutTimer();
 }
 
 //Close account function
