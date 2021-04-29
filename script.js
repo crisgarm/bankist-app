@@ -1,8 +1,8 @@
 'use strict';
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
 // BANKIST APP
+
+// <-------DATA------->
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
@@ -45,7 +45,7 @@ const account2 = {
 
 const accounts = [account1, account2];
 
-// Elements
+// <-------ELEMENTS------->
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -71,12 +71,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+// <-------FUNCTIONS------->
 const formatMovementsDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
   const daysPassed = calcDaysPassed(new Date(), date);
-  console.log(daysPassed);
 
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';
@@ -163,6 +163,7 @@ const createUsernames = function (accs) {
 
 createUsernames(accounts);
 
+//Update UI
 const updateUI = function (acc) {
   //Display movements
   displayMovements(acc);
@@ -174,6 +175,7 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+//Log Out Timer
 const startLogOutTimer = function () {
   const tick = function () {
     const min = String(Math.trunc(time / 60)).padStart(2, 0);
@@ -202,13 +204,8 @@ const startLogOutTimer = function () {
   return timer;
 };
 
-//EVENTS
+// <-------EVENTS------->
 let currentAccount, timer;
-
-// //FAKE ALWAYS LOGGED IN
-// currentAccount = account1;
-// updateUI(currentAccount);
-// containerApp.style.opacity = 100;
 
 //Login function
 function login(e) {
@@ -350,5 +347,3 @@ btnTransfer.addEventListener('click', transferMoney);
 btnLoan.addEventListener('click', requestLoan);
 btnClose.addEventListener('click', closeAccount);
 btnSort.addEventListener('click', sortMovements);
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
